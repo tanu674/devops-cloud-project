@@ -8,18 +8,14 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                echo 'Checking out source code...'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 sh '''
                     export PATH="/Users/almaanusiya/.docker/bin:$PATH"
 
-                    echo "===== BUILDING DOCKER IMAGE ====="
+                    echo "===================================="
+                    echo "BUILDING DOCKER IMAGE"
+                    echo "===================================="
 
                     docker build -t devops-cloud-project:latest .
                 '''
@@ -31,7 +27,9 @@ pipeline {
                 sh '''
                     export PATH="/Users/almaanusiya/.docker/bin:$PATH"
 
-                    echo "===== TAGGING IMAGE FOR GHCR ====="
+                    echo "===================================="
+                    echo "TAGGING IMAGE FOR GHCR"
+                    echo "===================================="
 
                     docker tag devops-cloud-project:latest \
                     ghcr.io/tanu674/devops-cloud-project:latest
@@ -43,7 +41,7 @@ pipeline {
             steps {
                 withCredentials([
                     usernamePassword(
-                        credentialsId: 'GitHub GHCR Credentials',
+                        credentialsId: 'github-ghcr',
                         usernameVariable: 'GHCR_USERNAME',
                         passwordVariable: 'GHCR_TOKEN'
                     )
@@ -51,7 +49,9 @@ pipeline {
                     sh '''
                         export PATH="/Users/almaanusiya/.docker/bin:$PATH"
 
-                        echo "===== LOGGING IN TO GHCR ====="
+                        echo "===================================="
+                        echo "LOGGING IN TO GHCR"
+                        echo "===================================="
 
                         echo "$GHCR_TOKEN" | docker login ghcr.io \
                             -u "$GHCR_USERNAME" \
@@ -61,12 +61,14 @@ pipeline {
             }
         }
 
-        stage('Push Image') {
+        stage('Push Image to GHCR') {
             steps {
                 sh '''
                     export PATH="/Users/almaanusiya/.docker/bin:$PATH"
 
-                    echo "===== PUSHING IMAGE TO GHCR ====="
+                    echo "===================================="
+                    echo "PUSHING IMAGE TO GHCR"
+                    echo "===================================="
 
                     docker push ghcr.io/tanu674/devops-cloud-project:latest
                 '''
@@ -75,12 +77,18 @@ pipeline {
     }
 
     post {
+
         success {
-            echo '===== JENKINS BUILD SUCCESSFUL ====='
+            echo "===================================="
+            echo "JENKINS BUILD SUCCESSFUL"
+            echo "DOCKER IMAGE PUSHED TO GHCR"
+            echo "===================================="
         }
 
         failure {
-            echo '===== JENKINS BUILD FAILED ====='
+            echo "===================================="
+            echo "JENKINS BUILD FAILED"
+            echo "===================================="
         }
     }
 }
