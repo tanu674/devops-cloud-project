@@ -49,22 +49,29 @@ pipeline {
         stage('Deploy to Server 1') {
             steps {
 
-                sshagent(['ec2-ssh']) {
+                withCredentials([
+                    sshUserPrivateKey(
+                        credentialsId: 'ec2-ssh',
+                        keyFileVariable: 'SSH_KEY',
+                        usernameVariable: 'SSH_USER'
+                    )
+                ]) {
 
                     sh '''
                         echo "===================================="
                         echo "DEPLOYING TO SERVER 1"
                         echo "===================================="
 
-                        ssh -o StrictHostKeyChecking=no ec2-user@34.221.216.79 "
-                            sudo docker pull $IMAGE_NAME &&
-                            sudo docker stop devops-cloud-container || true &&
-                            sudo docker rm devops-cloud-container || true &&
-                            sudo docker run -d \
-                                --name devops-cloud-container \
-                                -p 80:80 \
-                                $IMAGE_NAME
-                        "
+                        ssh -i "$SSH_KEY" \
+                            -o StrictHostKeyChecking=no \
+                            "$SSH_USER@34.221.216.79" \
+                            "sudo docker pull $IMAGE_NAME && \
+                             sudo docker stop devops-cloud-container || true; \
+                             sudo docker rm devops-cloud-container || true; \
+                             sudo docker run -d \
+                             --name devops-cloud-container \
+                             -p 80:80 \
+                             $IMAGE_NAME"
                     '''
                 }
             }
@@ -73,22 +80,29 @@ pipeline {
         stage('Deploy to Server 2') {
             steps {
 
-                sshagent(['ec2-ssh']) {
+                withCredentials([
+                    sshUserPrivateKey(
+                        credentialsId: 'ec2-ssh',
+                        keyFileVariable: 'SSH_KEY',
+                        usernameVariable: 'SSH_USER'
+                    )
+                ]) {
 
                     sh '''
                         echo "===================================="
                         echo "DEPLOYING TO SERVER 2"
                         echo "===================================="
 
-                        ssh -o StrictHostKeyChecking=no ec2-user@54.186.90.185 "
-                            sudo docker pull $IMAGE_NAME &&
-                            sudo docker stop devops-cloud-container || true &&
-                            sudo docker rm devops-cloud-container || true &&
-                            sudo docker run -d \
-                                --name devops-cloud-container \
-                                -p 80:80 \
-                                $IMAGE_NAME
-                        "
+                        ssh -i "$SSH_KEY" \
+                            -o StrictHostKeyChecking=no \
+                            "$SSH_USER@54.186.90.185" \
+                            "sudo docker pull $IMAGE_NAME && \
+                             sudo docker stop devops-cloud-container || true; \
+                             sudo docker rm devops-cloud-container || true; \
+                             sudo docker run -d \
+                             --name devops-cloud-container \
+                             -p 80:80 \
+                             $IMAGE_NAME"
                     '''
                 }
             }
