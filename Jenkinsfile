@@ -9,7 +9,6 @@ pipeline {
     stages {
 
         stage('Build and Push Docker Image') {
-
             steps {
 
                 withCredentials([
@@ -41,9 +40,55 @@ pipeline {
                             --push \
                             .
 
-                        echo "===================================="
                         echo "IMAGE PUSHED TO GHCR"
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy to Server 1') {
+            steps {
+
+                sshagent(['ec2-ssh']) {
+
+                    sh '''
                         echo "===================================="
+                        echo "DEPLOYING TO SERVER 1"
+                        echo "===================================="
+
+                        ssh -o StrictHostKeyChecking=no ec2-user@34.221.216.79 "
+                            sudo docker pull $IMAGE_NAME &&
+                            sudo docker stop devops-cloud-container || true &&
+                            sudo docker rm devops-cloud-container || true &&
+                            sudo docker run -d \
+                                --name devops-cloud-container \
+                                -p 80:80 \
+                                $IMAGE_NAME
+                        "
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy to Server 2') {
+            steps {
+
+                sshagent(['ec2-ssh']) {
+
+                    sh '''
+                        echo "===================================="
+                        echo "DEPLOYING TO SERVER 2"
+                        echo "===================================="
+
+                        ssh -o StrictHostKeyChecking=no ec2-user@54.186.90.185 "
+                            sudo docker pull $IMAGE_NAME &&
+                            sudo docker stop devops-cloud-container || true &&
+                            sudo docker rm devops-cloud-container || true &&
+                            sudo docker run -d \
+                                --name devops-cloud-container \
+                                -p 80:80 \
+                                $IMAGE_NAME
+                        "
                     '''
                 }
             }
@@ -54,14 +99,16 @@ pipeline {
 
         success {
             echo "===================================="
-            echo "JENKINS BUILD SUCCESSFUL"
-            echo "DOCKER IMAGE PUSHED TO GHCR"
+            echo "FULL CI/CD DEPLOYMENT SUCCESSFUL"
             echo "===================================="
+            echo "Docker image pushed to GHCR"
+            echo "Server 1 updated"
+            echo "Server 2 updated"
         }
 
         failure {
             echo "===================================="
-            echo "JENKINS BUILD FAILED"
+            echo "CI/CD DEPLOYMENT FAILED"
             echo "===================================="
         }
     }
