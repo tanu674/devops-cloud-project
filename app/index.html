@@ -1,10 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>DevOps Cloud Deployment</title>
+    <title>DevOps Cloud Deployment | CI/CD Success</title>
 
     <style>
         body {
@@ -17,7 +18,7 @@
         header {
             background: #111827;
             color: white;
-            padding: 30px;
+            padding: 35px 20px;
             text-align: center;
         }
 
@@ -28,7 +29,7 @@
 
         header p {
             color: #cbd5e1;
-            margin-top: 10px;
+            margin-top: 12px;
         }
 
         .container {
@@ -39,15 +40,38 @@
 
         .status {
             background: white;
-            padding: 25px;
+            padding: 30px 20px;
             border-radius: 12px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
 
+        .success-banner {
+            display: inline-block;
+            background: #dcfce7;
+            color: #166534;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .status h2 {
+            margin-top: 5px;
+        }
+
         .running {
             color: #16a34a;
             font-weight: bold;
+        }
+
+        .update-message {
+            margin-top: 20px;
+            padding: 15px;
+            background: #eff6ff;
+            border-left: 5px solid #2563eb;
+            border-radius: 6px;
+            text-align: left;
         }
 
         .pipeline {
@@ -59,25 +83,48 @@
 
         .card {
             background: white;
-            padding: 20px;
+            padding: 20px 12px;
             border-radius: 10px;
             text-align: center;
             box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+            border-bottom: 4px solid #16a34a;
         }
 
         .card h3 {
             margin-bottom: 8px;
         }
 
+        .card p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .details {
+            background: white;
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+        }
+
+        .details li {
+            margin: 12px 0;
+        }
+
         footer {
             text-align: center;
             margin-top: 40px;
+            padding: 20px;
             color: #64748b;
         }
 
         @media (max-width: 700px) {
             .pipeline {
                 grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 26px;
             }
         }
     </style>
@@ -86,13 +133,15 @@
 <body>
 
 <header>
-    <h1>Cloud DevOps Deployment</h1>
-    <p>Automated CI/CD using GitHub, Jenkins, Docker, Terraform & AWS</p>
+    <h1>CI/CD Pipeline Updated Successfully!</h1>
+    <p>Automated Cloud Deployment using GitHub, Jenkins, Docker, Terraform & AWS</p>
 </header>
 
 <div class="container">
 
     <div class="status">
+        <div class="success-banner">✓ DEPLOYMENT SUCCESSFUL</div>
+
         <h2>Application Status</h2>
 
         <p>
@@ -100,7 +149,17 @@
             <span class="running">RUNNING</span>
         </p>
 
-        <p>Environment: AWS EC2</p>
+        <p>Environment: AWS EC2 Cloud</p>
+
+        <div class="update-message">
+            <strong>CI/CD Update Test</strong>
+            <p>
+                This page has been updated in the source code.
+                After the change is pushed to GitHub, Jenkins builds
+                and publishes the Docker image, then deploys it to the
+                EC2 servers.
+            </p>
+        </div>
     </div>
 
     <h2>DevOps Pipeline</h2>
@@ -114,7 +173,7 @@
 
         <div class="card">
             <h3>Jenkins</h3>
-            <p>CI/CD</p>
+            <p>Automated CI/CD</p>
         </div>
 
         <div class="card">
@@ -124,21 +183,35 @@
 
         <div class="card">
             <h3>Terraform</h3>
-            <p>Infrastructure</p>
+            <p>Infrastructure as Code</p>
         </div>
 
         <div class="card">
             <h3>AWS EC2</h3>
-            <p>Deployment</p>
+            <p>Cloud Deployment</p>
         </div>
 
     </div>
 
+    <div class="details">
+        <h2>Deployment Overview</h2>
+        <ul>
+            <li>Source code managed using GitHub.</li>
+            <li>Jenkins automates the build and deployment pipeline.</li>
+            <li>Docker packages the application into a container image.</li>
+            <li>GitHub Container Registry stores the Docker image.</li>
+            <li>Terraform provisions the AWS cloud infrastructure.</li>
+            <li>Two EC2 servers host the deployed web application.</li>
+        </ul>
+    </div>
+
     <footer>
         <p>DevOps Cloud Deployment Project</p>
+        <p>Built with GitHub | Jenkins | Docker | Terraform | AWS</p>
     </footer>
 
 </div>
 
 </body>
 </html>
+```
