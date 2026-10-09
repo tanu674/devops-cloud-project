@@ -64,7 +64,7 @@ pipeline {
 
                         ssh -i "$SSH_KEY" \
                             -o StrictHostKeyChecking=no \
-                            "$SSH_USER@34.221.216.79" \
+                            "$SSH_USER@52.43.195.222" \
                             "sudo docker pull $IMAGE_NAME && \
                              sudo docker stop devops-cloud-container || true; \
                              sudo docker rm devops-cloud-container || true; \
@@ -95,7 +95,7 @@ pipeline {
 
                         ssh -i "$SSH_KEY" \
                             -o StrictHostKeyChecking=no \
-                            "$SSH_USER@54.186.90.185" \
+                            "$SSH_USER@34.222.23.167" \
                             "sudo docker pull $IMAGE_NAME && \
                              sudo docker stop devops-cloud-container || true; \
                              sudo docker rm devops-cloud-container || true; \
