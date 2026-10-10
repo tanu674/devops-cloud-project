@@ -1,3 +1,4 @@
+
 pipeline {
 
     agent any
@@ -10,7 +11,6 @@ pipeline {
 
         stage('Build and Push Docker Image') {
             steps {
-
                 withCredentials([
                     usernamePassword(
                         credentialsId: 'github-ghcr',
@@ -18,7 +18,6 @@ pipeline {
                         passwordVariable: 'GHCR_TOKEN'
                     )
                 ]) {
-
                     sh '''
                         export PATH="/Users/almaanusiya/.docker/bin:$PATH"
 
@@ -48,7 +47,6 @@ pipeline {
 
         stage('Deploy to Server 1') {
             steps {
-
                 withCredentials([
                     sshUserPrivateKey(
                         credentialsId: 'ec2-ssh',
@@ -56,7 +54,6 @@ pipeline {
                         usernameVariable: 'SSH_USER'
                     )
                 ]) {
-
                     sh '''
                         echo "===================================="
                         echo "DEPLOYING TO SERVER 1"
@@ -64,10 +61,11 @@ pipeline {
 
                         ssh -i "$SSH_KEY" \
                             -o StrictHostKeyChecking=no \
-                            "$SSH_USER@52.43.195.222" \
-                            "sudo docker pull $IMAGE_NAME && \
-                             sudo docker stop devops-cloud-container || true; \
-                             sudo docker rm devops-cloud-container || true; \
+                            -o ConnectTimeout=15 \
+                            "$SSH_USER@34.222.162.204" \
+                            "sudo docker pull $IMAGE_NAME &&
+                             (sudo docker stop devops-cloud-container || true) &&
+                             (sudo docker rm devops-cloud-container || true) &&
                              sudo docker run -d \
                              --name devops-cloud-container \
                              -p 80:80 \
@@ -79,7 +77,6 @@ pipeline {
 
         stage('Deploy to Server 2') {
             steps {
-
                 withCredentials([
                     sshUserPrivateKey(
                         credentialsId: 'ec2-ssh',
@@ -87,7 +84,6 @@ pipeline {
                         usernameVariable: 'SSH_USER'
                     )
                 ]) {
-
                     sh '''
                         echo "===================================="
                         echo "DEPLOYING TO SERVER 2"
@@ -95,10 +91,11 @@ pipeline {
 
                         ssh -i "$SSH_KEY" \
                             -o StrictHostKeyChecking=no \
-                            "$SSH_USER@34.222.23.167" \
-                            "sudo docker pull $IMAGE_NAME && \
-                             sudo docker stop devops-cloud-container || true; \
-                             sudo docker rm devops-cloud-container || true; \
+                            -o ConnectTimeout=15 \
+                            "$SSH_USER@35.90.1.180" \
+                            "sudo docker pull $IMAGE_NAME &&
+                             (sudo docker stop devops-cloud-container || true) &&
+                             (sudo docker rm devops-cloud-container || true) &&
                              sudo docker run -d \
                              --name devops-cloud-container \
                              -p 80:80 \
@@ -110,7 +107,6 @@ pipeline {
     }
 
     post {
-
         success {
             echo "===================================="
             echo "FULL CI/CD DEPLOYMENT SUCCESSFUL"
@@ -127,3 +123,4 @@ pipeline {
         }
     }
 }
+
